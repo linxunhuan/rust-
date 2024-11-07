@@ -1,5 +1,5 @@
 mod stack;
-mod queue;
+pub mod queue;
 mod linked_list;
 mod list_stack;
 mod lvec;
@@ -19,5 +19,5 @@ mod radix_sort;
 mod binary_tree;
 mod binary_heap;
 mod avl;
-// mod bst;
+mod bst;
 

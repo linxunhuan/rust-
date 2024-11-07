@@ -259,27 +259,6 @@ impl<T, U>BST<T,U>
             }
             println!("key:{:?}, val:{:?}",self.key, self.value);
         }
-
-        fn levelorder(&self){
-            let size = self.size();
-            let mut queue = Queue::new(size);
-
-            let _r = queue.enqueue(Box::new(self.clone()));
-            while !queue.is_empty(){
-                let front = queue.dequeue().unwrap();
-                println!("key:{:?}, val:{:?}", front.key, front.val);
-
-                match front.key.get_left() {
-                    Some(left) => { let _r = queue.enqueue(left);},
-                    None => (),
-                }
-
-                match front.key.get_right() {
-                    Some(right) => { let _r = queue.enqueue(right);},
-                    None => (),
-                }
-            }
-        }
 }
 
 #[cfg(test)]
@@ -320,6 +299,5 @@ mod tests {
         bst.preorder();
         bst.inorder();
         bst.postorder();
-        bst.levelorder();
     }
 }

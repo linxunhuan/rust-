@@ -1,35 +1,35 @@
 #[derive(Debug)]
-struct Queue<T>{
+pub struct Queue<T>{
     cap:usize,  //容量
     data: Vec<T>,//数据容量
 }
 
 impl<T> Queue<T> {
-    fn new(size:usize) -> Self {
+    pub fn new(size:usize) -> Self {
         Self{
             cap: size,
             data: Vec::new(),
         }
     }
 
-    fn is_empty(&self) -> bool {
+    pub fn is_empty(&self) -> bool {
         0 == self.len()
     }
 
-    fn is_full(&self)-> bool {
+    pub fn is_full(&self)-> bool {
         self.cap == self.len()
     }
 
-    fn len(&self) -> usize {
+    pub fn len(&self) -> usize {
         self.data.len()
     }
 
-    fn clear(&mut self) {
+    pub fn clear(&mut self) {
         self.data = Vec::with_capacity(self.cap);
     }
 
     //判断是否有剩余空间，如果有的话，将其数据添加到队列中
-    fn enqueue(&mut self, item: T) -> Result<(),String> {
+    pub fn enqueue(&mut self, item: T) -> Result<(),String> {
         if self.is_full() {
             return Err("Queue is full!".to_string())
         } else {
@@ -39,7 +39,7 @@ impl<T> Queue<T> {
     }
 
     //数据出列
-    fn dequeue(&mut self) -> Option<T> {
+    pub fn dequeue(&mut self) -> Option<T> {
         if self.is_empty() {
             None
         } else {
@@ -49,12 +49,12 @@ impl<T> Queue<T> {
 
     /*以下是为队列实现的迭代功能 */
     //队列改变，成为迭代器
-    fn into_iter(self) -> IntoIter<T> {
+    pub fn into_iter(self) -> IntoIter<T> {
         IntoIter(self)
     }
 
     //队列不变，得到不可变迭代器
-    fn iter(&self) -> Iter<T> {
+    pub fn iter(&self) -> Iter<T> {
         let mut iterator = Iter{ stack: Vec::new() };
         for item in self.data.iter(){
             iterator.stack.push(item.clone());
@@ -63,7 +63,7 @@ impl<T> Queue<T> {
     }
 
     //队列不变，得到可变迭代器
-    fn iter_mut(&mut self) -> IterMut<T> {
+    pub fn iter_mut(&mut self) -> IterMut<T> {
         let mut iterator = IterMut{ stack: Vec::new() };
         for item in self.data.iter_mut(){
             iterator.stack.push(item);
