@@ -1,5 +1,6 @@
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap,HashMap,HashSet};
+use std::hash::Hash;
 
 // 点的定义
 #[derive(Debug,Copy,Clone,PartialEq,Eq,Hash)]
@@ -14,12 +15,70 @@ impl <'a> Vertex<'a>{
 }
 
 // 访问过的点
+#[derive(Debug)]
+struct Visited<T>{
+    vertex:T,
+    distance:usize,
+}
 
-// 为访问过的点添加全序比较功能
+// 为visited 添加比较功能
+impl<T> Ord for Visited<T> {
+    fn cmp(&self, other: &Self) -> Ordering {
+        other.distance.cmp(&self.distance)
+    }
+}
 
+impl<T>PartialOrd for Visited<T> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl<T>Eq for Visited<T> {}
+impl<T>PartialEq for Visited<T> {
+    fn eq(&self, other: &Self) -> bool {
+        self.distance == other.distance
+    }
+}
 
 // 最短路径算法
-
+fn dijkstra<'a>(start:Vertex<'a>, adj_list:&HashMap<Vertex<'a>,Vec<(Vertex<'a>,usize)>>)->HashMap<Vertex<'a>,usize> {
+    let mut distances = HashMap::new();  // 距离
+    let mut visited: HashSet<Vertex<'a>>= HashSet::new();   // 访问过的点
+    let mut heap = BinaryHeap::new();      // 待访问的点
+    
+    // 设置起始点和距离个点的初始位置
+    distances.insert(start,0);
+    heap.push(Visited{vertex:start,distance:0});
+    
+    while let Some(Visited{vertex,distance}) = heap.pop(){
+        // 已经访问过这个点，继续下一个点
+        if visited.contains(&vertex){
+            continue;
+        }
+        
+        // 获取邻接点
+        if let Some(nbrs) = adj_list.get(&vertex){
+            for (nbr, weight) in nbrs{
+                let new_distance = distance + weight;
+                let is_shorter = distances.get(&nbr)
+                                                .map_or(true,|&current| new_distance < current);
+                
+                // 如果新的距离更短，则更新距离和路径
+                if is_shorter{
+                    distances.insert(*nbr,new_distance);
+                    heap.push(Visited{
+                            vertex:*nbr,
+                            distance:new_distance
+                        });
+                }
+            }
+        }
+    }
+    
+    
+    distances
+}
 
 
 
