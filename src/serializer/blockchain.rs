@@ -1,6 +1,6 @@
 //有了区块后，接下来就是构建区块链，用Vec存储多个区块
 
-use crate::block::Block;
+// use crate::block::Block;
 use crate::serializer::block::Block;
 
 // 第一个区块没有prehash，所以需要手动设置
@@ -8,7 +8,7 @@ const PRE_HASH: &str = "UnVzdCBsZWFybmluZyBpbiBCbG9jaw==";
 
 pub struct Blockchain {
     pub blocks: Vec<Block>,
-}-
+}
 
 impl Blockchain{
     pub fn new() -> Self {
